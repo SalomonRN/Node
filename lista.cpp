@@ -118,7 +118,7 @@ void createInPosition(int value, Node *&head, int position) // 0
                     break;
                 }
                 current = current->next;
-                i++;
+                 i++;
             }
         }
         else
