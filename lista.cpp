@@ -18,7 +18,7 @@ struct Node
  * @param newNode Variable puntero que hace referencia al objeto, y que guarda la posicion de memoria.
  * @param current Variable puntero que hace referencia al direccion de memoria actual del ultimo nodo. ()
  */
-void append(Node *&head, int value)
+void create(Node *&head, int value)
 {
 
     Node *newNode = new Node; // Se crea un nuevo Nodo, y '*newNode' guarda la posicion en memoria del objeto. (Puntero)
@@ -66,21 +66,212 @@ void printList(Node *head)
         current = current->next;
     }
 }
+
+void read(int value, Node *head)
+{
+    Node *current = head;
+    int i = 0;
+    bool band = true;
+    while (current != nullptr)
+    {
+        if (current->data == value)
+        {
+            cout << "Valor encontrado posicion: "
+                 << i << endl;
+            band = false;
+        }
+        current = current->next;
+        i++;
+    }
+    if (band)
+    {
+        cout << "Valor no encontrado " << endl;
+    }
+}
+
+void createInPosition(int value, Node *&head, int position) // 0
+{
+    Node *newNode = new Node; // Se crea un nuevo Nodo, y '*newNode' guarda la posicion en memoria del objeto. (Puntero)
+    newNode->data = value;    // Se actualiza el valor de 'newNode.data' segun 'value'
+    newNode->next = nullptr;  // Se actualiza el valor de 'newNode.next' a 'nullptr'
+
+    // Validacion para saber si 'head' tiene alguna direccion en memoria. (No hay otro Nodo. Es el Primer nodo)
+    if (head == nullptr)
+    {
+        head = newNode; // 'head' se actualiza de manera global y guarda ahora la direccion en memoria del primer nodo de la lista.
+    }
+    // Parte para cuando ya existe un nodo (Lista con un valor), y se va agregar uno nuevo.
+    else
+    {
+        Node *current = head;
+        int i = 0;
+        if (position != -1) // 
+        {
+
+            while (true)
+            {
+                // 1  3
+                if (i == position)
+                {
+                    newNode->next = current->next;
+                    current->next = newNode;
+                    break;
+                }
+                current = current->next;
+                i++;
+            }
+        }
+        else
+        {
+            cout << "\n 0" << endl;
+            newNode->next = head;
+            head = newNode;
+        }
+    }
+}
+
+void deleteData(Node *&head, int value, int position)
+{
+    Node *current = head;
+    Node *past = NULL;
+    int i = 1;
+    bool band = true;
+    // 5 DELETE
+    //     *
+    // 5 8 5 2 1
+    // 1 2 3 4 5
+    while (true)
+    { //         5               5         3       3
+        if (current->data == value && position == i && current != NULL)
+        {
+            // 5
+            past->next = current->next;
+            delete current;
+            band = false;
+            cout << "Valor eliminado " << endl;
+            break;
+        }
+
+        // 8
+        past = current;
+        // 5
+        current = current->next;
+        i++;
+        if (current->next == nullptr)
+        {
+            break;
+        }
+    }
+    if (band)
+    {
+        cout << "Valor no eliminado " << endl;
+    }
+}
+
+void deleteFirts(Node *&head, int value)
+{
+    Node *current = head;
+    Node *past = NULL;
+
+    if (head != NULL)
+    {
+        while ((current != NULL) && (current->data != value))
+        {
+            past = current;
+            current = current->next;
+        }
+        if (current == NULL)
+        {
+            cout << "No" << endl;
+        }
+        else if (past == NULL)
+        {
+            head = head->next;
+            delete current;
+        }
+        else
+        {
+            past->next = current->next;
+            delete current;
+        }
+    }
+    else
+    {
+        cout << "Nada que borrar" << endl;
+    }
+}
+
 /**
  * @param head Variable puntero nulo.
  * @param temp Variable puntero que hace referencia a la direccion de memoria que está guardada en 'head'.
  */
 int main()
 {
-    // Se crea un puntero de tipo Nodo vacio.
     Node *head = nullptr;
-    // Se llama a la funcion 'append()' y se pasan de parametros el puntero 'head' y el valor que sea desea guardar en la lista. (El tipo de valor se define en la estrcutura Node).
-    append(head, 1);
-    append(head, 3);
-    append(head, 2);
-    append(head, 3);
-    append(head, 845614);
-    append(head, 5);
+    int data, choise, position; // crud
+    do
+    {
+        cout << "Opciones: "
+             << "\n 0: Create --- 1: Creare n Posicion ---  2:Read --- 3:Update --- 4:Delete --- 5: Delete Position" << endl;
+        cin >> choise;
+
+        switch (choise)
+        {
+        case 0:
+            cout << "Valor a ingresar: ";
+            cin >> data;
+            create(head, data);
+            break;
+
+        case 1:
+            cout << "Valor a ingresar: ";
+            cin >> data;
+            cout << "Posicion: ";
+            cin >> position;
+            createInPosition(data, head, position);
+            break;
+        case 2:
+            cout << "Dato a buscar: ";
+            cin >> data;
+            read(data, head);
+            break;
+
+        case 3:
+            cout << "Dato a actualizar: ";
+            cin >> data;
+            cout << "Posicion del dato: ";
+            cin >> position;
+            break;
+        case 4:
+            cout << "Dato a eliminar: ";
+            cin >> data;
+            deleteFirts(head, data);
+            break;
+        case 5:
+            cout << "Dato a eliminar: ";
+            cin >> data;
+            cout << "Posicion: ";
+            cin >> position;
+            deleteData(head, data, position);
+            break;
+        case 6:
+            printList(head);
+            break;
+
+        default:
+            cout << "Opcion invalida" << endl;
+            break;
+        }
+
+        cout << "\n Opciones: \n"
+             << "0:Finalizar 1:Seguir" << endl;
+        cin >> choise;
+
+    } while (choise == 1);
+
+    // Se crea un puntero de tipo Nodo vacio.
+
+    // Se llama a la funcion 'create()' y se pasan de parametros el puntero 'head' y el valor que sea desea guardar en la lista. (El tipo de valor se define en la estrcutura Node).
 
     // Incio de impresion.
     cout << "Lista de punteros: ";
@@ -89,15 +280,16 @@ int main()
 
     // Liberar la memoria.
     // Ciclo While que se ejecuta siempre y cuando 'head' sea diferente a nullptr.
-    while (head != nullptr)
-    {
-        // Se crea un puntero para de tipo Nodo que es igual a la variable 'head'.
-        Node *temp = head;
-        // Se actualiza el valor de 'head' al siguiente espacio en memoria del siguiente Nodo..
-        head = head->next;
-        // Se libera la memoria, segun 'temp'.
-        delete temp;
-    }
+
+    /*while (head != nullptr)
+     {
+         // Se crea un puntero para de tipo Nodo que es igual a la variable 'head'.
+         Node *temp = head;
+         // Se actualiza el valor de 'head' al siguiente espacio en memoria del siguiente Nodo..
+         head = head->next;
+         // Se libera la memoria, segun 'temp'.
+         delete temp;
+     }*/
     system("PAUSE");
     return 0;
 }
