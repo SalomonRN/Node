@@ -82,6 +82,11 @@ void createInPosition(int value, Node *&head, int position)
                     current->next = newNode;       // 'current.next' de actualiza y apunta al nuevo nodo (El nodo alcutal apunta )
                     break;
                 }
+                if (current == NULL)
+                {
+                    cout << "Posicion fuera de la lista, ingrese mas valores" << endl;
+                    break;
+                }
                 current = current->next;
                 i++;
             }
@@ -104,7 +109,7 @@ void createInPosition(int value, Node *&head, int position)
  */
 void readOne(int value, Node *head)
 {
-    // / Se crea un puntero para de tipo Nodo que es igual a la variable 'head'.
+    // Se crea un puntero para de tipo Nodo que es igual a la variable 'head'.
     Node *current = head;
     // Se crea la variable 'i' para indicar la poscion actual de la lista.
     int i = 0;
@@ -144,136 +149,188 @@ void readAll(Node *head)
 {
     // Se crea un puntero para de tipo Nodo que es igual a la variable 'head'.
     Node *current = head;
-    // Ciclo para recorrer la lista siempre y cuando 'current' no sea nullptr (Para recorrer de inicio a fin la lista).
-    while (current != nullptr)
+    if (current != NULL)
     {
-        // Se imprime el valor de 'current.data'
-        cout << current->data << " ";
-        // Se actualiza la varaible 'current' a la direccion en memoria del siguiente nodo guardado en 'current.next'.
-        current = current->next;
+        // Ciclo para recorrer la lista siempre y cuando 'current' no sea nullptr (Para recorrer de inicio a fin la lista).
+        while (current != nullptr)
+        {
+            // Se imprime el valor de 'current.data'
+            cout << current->data << " ";
+            // Se actualiza la varaible 'current' a la direccion en memoria del siguiente nodo guardado en 'current.next'.
+            current = current->next;
+        }
+    }
+    else
+    {
+        cout << "Lista vacia" << endl;
     }
 }
 /**
- * Funcion para actualizar un valor en la posicion 
+ * Funcion para actualizar un valor en la posicion
  * @param [in] head Puntero al puntero que indica la dirrecion de memoria del primer Nodo de la lista.
- * @param [in] value  Posicion de la lista donde se actualizará el dato.
+ * @param [in] value Variable del nuevo valor que se quiere colocar en la lista
  * @param [in] position Posicion de la lista en la que se va a insertar el dato.
  * @param current Variable puntero que hace referencia al direccion de memoria actual del ultimo nodo seleccionado de la lista. ()
- * 
-*/
-void updateOne(Node *&head, int value, int position)
+ */
+void updateOne(Node *&head, int new_value, int position)
 {
-    Node *current = head;
-    int i = 0;
-    if (current != NULL) //
+    Node *current = head; // Se crea un puntero para de tipo Nodo que es igual a la variable 'head'.
+    int i = 0;            // Variable para llevar el indice actual.
+    // Validacion para verificar si la lista no está vacia
+    if (current != NULL)
     {
-
-        while (true)
+        // Ciclo while para recorrer la lista
+        while (i != position && current != nullptr) // Si el indice 'i' no coincide con la posicion 'position' y el valor actual al que apunta 'current' no es nullptr entra al while (El valor que se busca no es el actual)
         {
-            if (i == position)
-            {
-
-                current->data = value;
-                break;
-            }
+            // Se rota las posiciones de 'current' a 'current.next' para asi que se guarde el nodo al que está apuntado 'current'
             current = current->next;
+            // Se suma uno al indice
             i++;
         }
+        // Validacion para cuando 'current'apunta a nulo (Fin de la lista) (Validacion para que el programa se crashee)
+        if (current == NULL)
+        {
+            // Impresion de posicion fuera de la longitud actual de la lista
+            cout << "Posicion fuera de la lista, ingrese mas valores" << endl;
+        }
+        // Cuando el valor de 'current' no es null, entonces si se encontró el valor
+        else
+        {
+            // Confirmacion de dato actualizado
+            current->data = new_value;
+            cout << "DATO ACTUALIZADO" << endl;
+        }
     }
+    // Parte cuando la lista está vacia
     else
     {
         cout << "Nada que editar" << endl;
     }
 }
 /**
- *
+ * Funcion para actualizar al primir numero que coincide con 'value'.
+ * @param [in] head Puntero al puntero que indica la dirrecion de memoria del primer Nodo de la lista.
+ * @param [in] new_value Variable del nuevo valor que se quiere colocar en la lista
+ * @param [in] filter Variable de filtro para buscar el valor a editar.
+ * @param current Variable puntero que hace referencia al direccion de memoria actual del ultimo nodo seleccionado de la lista. ()
  */
-void updateFirts(Node *&head, int new_value, int value)
+void updateFirts(Node *&head, int new_value, int filter)
 {
-    Node *current = head;
-    // 6 actualizar
-    // 1 2 3
-    //       *
+    Node *current = head; // Se crea un puntero para de tipo Nodo que es igual a la variable 'head'.
+    // Validacion para saber si la lista está vacia
     if (head != NULL)
     {
-        while (current->next != nullptr && current->data != value)
+        // Ciclo while que recorre la lista hasta encontrar el nodo que se quiere modificar
+        while (current->next != nullptr && current->data != filter)
         {
+            // Se rotan los puntero de 'current' a donde apunta 'current.next'
             current = current->next;
         }
+        // Validacion para ver si se llegó al final de la lista sin encontrar el valor
         if (current->next == nullptr)
         {
             cout << "VALOR NO ENCONTRADO" << endl;
         }
+        // Parte para cuando si existe el dato y se actualiza
         else
         {
+            //  Actualiza el dato a lo que esté en la variable 'new_value'
             current->data = new_value;
+            // Impresion de confirmacion
+            cout << "Se actualizó el dato" << endl;
         }
     }
+    // Cuando la lista está vacia
     else
     {
         cout << "Nada que actualizar" << endl;
     }
 }
 /**
- *
+ * Funcion para actualizar todos los datos iguales a 'filter'
+ * @param [in] head Puntero al puntero que indica la dirrecion de memoria del primer Nodo de la lista.
+ * @param [in] new_value Variable del nuevo valor que se quiere colocar en la lista
+ * @param [in] flter Variable de filtro para buscar el valor a editar.
+ * @param current Variable puntero que hace referencia al direccion de memoria actual del ultimo nodo seleccionado de la lista. ()
  */
-void updateAll(Node *&head, int new_value, int value)
+void updateAll(Node *&head, int new_value, int filter)
 {
-    Node *current = head;
-    if (current != NULL) //
+    Node *current = head; // Se crea un puntero para de tipo Nodo que es igual a la variable 'head'.
+    bool band = true;
+    // Validacion para comprar si la lista no esté vacia
+    if (current != NULL)
     {
-
+        // Ciclo while que recorre la lista siempre y cuando 'current' sea diferente de null (Para saber si se llega al final de la lista)
         while (current != NULL)
         {
-            if (value == current->data)
+            // Validacion para sabe si se el valor actual del nodo 'current.data' es igual al valor de 'filter'
+            if (current->data == filter)
             {
-
+                // Se actualiza el valor del nodo actual al valor de 'new_value'
                 current->data = new_value;
+                cout << "Valor actualizado" << endl;
+                band = false;
             }
+            // Se rotan los apuntados de memorias, de 'current' a 'current.next'
             current = current->next;
         }
+        if (band)
+        {
+            cout << "No se encontró ningur valor" << endl;
+        }
     }
+    // Parte cuando la lista está vacia
     else
     {
         cout << "Nada que editar" << endl;
     }
 }
 /**
- * QUE PASA SI ELIMINO LA CABEZA?
+ * Funcion para eliminar un nodo en la posicion X
+ * @param [in] head Puntero al puntero que indica la dirrecion de memoria del primer Nodo de la lista.
+ * @param [in] filter Variable que sea usa como filtro, debe ser igual al valor de la lista en la posicion X.
+ * @param [in] position Posicion de la lista en la que se va a eliminar el dato.
+ * @param past Variable node para guardar el nodo anterior para despues actualizar su apuntador
  */
-void deleteOne(Node *&head, int value, int position)
+void deleteOne(Node *&head, int filter, int position)
 {
 
-    Node *current = head;
-    Node *past = NULL;
-    int i = 1;
-    bool band = true;
-    // 5 DELETE
-    //     *
-    // 5 8 5 2 1
-    // 1 2 3 4 5
-    while (true) // EN VEZ DE TRUE PONER --current->next == nullptr
-    {            //         5               5        1       3
-        if (current->data == value && position == i && current != NULL)
+    Node *current = head; // Se crea un puntero para de tipo Nodo que es igual a la variable 'head'.
+    Node *past = NULL;    // Se crea un puntero para de tipo Nodo iniciado en null.
+    int i = 0;            // Variable para llevar el indice actual.
+    bool band = true;     // Boleano para indicar si un valor de encontró o no
+
+    // Ciclo while para recorre la lista
+    while (current != nullptr)
+    {
+        // Validacion saber si 'current.data' es igual a 'filter', y si la posicion 'positiomn' que se desar ir es igual al indice 'i', y tambien si 'current' y 'head' son iguales; esto es para eliminar el primer dato de la lista, y actualizar la cabeza
+        if (current->data == filter && position == i && current == head)
         {
-            // 5
-            past->next = current->next;
-            delete current;
-            band = false;
+            head = current->next; // Se actualiza la cabeza a donde esté apuntado 'current'
+            delete current;       // Se libera la memoria de current
+            band = false;         // Se coloca la bandera el false para indicar que si se borró un dato
+            cout << "Valor de la cabeza eliminados" << endl;
+            break;
+        }
+        // Validacion saber si 'current.data' es igual a 'filter', y si la posicion 'positiomn' que se desar ir es igual al indice 'i', y si 'current' es diferente de null (Para saber si se llegó al final de la lista), esto para saber si se encontro el valor; esto es para cuando el valor si se encuentra, pero no es la cabeza
+        if (current->data == filter && position == i && current != NULL)
+        {
+
+            past->next = current->next; // Se actualiza el puntero del nodo anterior a donde esté apuntado 'current'
+            delete current;             // Se libera la memoria de current
+            band = false;               // Se coloca la bandera el false para indicar que si se borró un dato
             cout << "Valor eliminado " << endl;
             break;
         }
 
-        // 8
+        // 'past' pasa a ser 'current' para así guardarlo y no perder el nodo anterior
         past = current;
-        // 5
+        // Se rota a donde esté apuntando 'current'
         current = current->next;
+        // Se le agrega uno al indice
         i++;
-        if (current->next == nullptr)
-        {
-            break;
-        }
     }
+    // Validacon para saber si el un dato fue eliminado
     if (band)
     {
         cout << "Valor no eliminado " << endl;
@@ -287,7 +344,7 @@ void deleteOne(Node *&head, int value, int position)
  * @param past Variable tipo Node para guardar el nodo anterior de manera temporal.
  *
  */
-void deleteFirts(Node *&head, int value)
+void deleteFirts(Node *&head, int filter)
 {
     Node *current = head; // Se crea un nuevo Node 'current' para moverse entre posiciones.
     Node *past = NULL;    // // Se crea un nuevo Node 'past' para guardar el Nodo anterior.
@@ -295,8 +352,8 @@ void deleteFirts(Node *&head, int value)
     // Validacion para saber si la lista está vacia.
     if (head != NULL)
     {
-        // Ciclo while para recorrer la lista siempre y cuando no se llegue al final (current != NULL) o cuando el valor actual de 'current.data' no coincida con 'value' (current->data != value)
-        while (current != NULL && current->data != value)
+        // Ciclo while para recorrer la lista siempre y cuando no se llegue al final (current != NULL) o cuando el valor actual de 'current.data' no coincida con 'filter' (current->data != filter)
+        while (current != NULL && current->data != filter)
         {
             // 'past' se actualiza a 'current' para guardar el nodo que está en 'current' para usarlo despues.
             past = current;
@@ -313,12 +370,14 @@ void deleteFirts(Node *&head, int value)
         {
             head = head->next; // La cabeza se actualiza al siguiente valor de la lista, 'head.next'
             delete current;    // Se libera la memoria de 'current'
+            cout << "Valor eliminado en la cabeza" << endl;
         }
         // Para cuando el valor se encuentra, pero no está en la primera posicon
         else
         {
             past->next = current->next; // El nodo pasado apuntará ahora a donde apunta 'current'
             delete current;             // Se libera la memoria de 'current'
+            cout << "Valor eliminado" << endl;
         }
     }
     // Impresion cuando la lista está vacia
@@ -328,39 +387,58 @@ void deleteFirts(Node *&head, int value)
     }
 }
 /**
- * QUE PASA SI ELIMINO LA CABEZA?
+ * Funcion para eliminar todos los datos que coincidan.
+ * @param [in] head untero al puntero que indica la dirrecion de memoria del primer Nodo de la lista.
+ * @param [in] filter Variable de filtro para buscar el valor a borrar.
+ * @param current Variable tipo Node para moverse en la lista.
+ * @param past  Variable node para guardar el nodo anterior para despues actualizar su apuntador
  */
-void deleteAll(Node *&head, int value)
+void deleteAll(Node *&head, int filter)
 {
-    Node *current = head;
-    Node *past = NULL;
+    Node *current = head; // Se crea un nuevo Node 'current' para moverse entre posiciones.
+    Node *past = NULL;    // // Se crea un nuevo Node 'past' para guardar el Nodo anterior.
+    bool band = true;     // Boleano para indicar si un valor de encontró o no
 
+    // Validacion para saber si la lista está vacia
     if (head != NULL)
     {
+        // Ciclo while para recorrer la lista siempre y cuando no se llegue al final
         while (current != nullptr)
         {
 
-            // LA CABEZA TIENE UN DATO A BORRAR
-            if (current->data == value && head == current)
+            // Validacion para saber si la cabeza tiene el valor que sea desea borrar.
+            if (current->data == filter && head == current)
             {
-                head = head->next;
-                delete current;
-                current = head;
+                head = head->next; // Se actualiza la cabeza a donde esté apuntando la cabeza
+                delete current;    // Se libera la memoria de 'current'
+                cout << "Se ha eliminado el valor de la cabeza" << endl;
+                current = head; // 'current' pasa a ser la nueva cabeza para seguir buscando
+                band = false;   // Se coloca la bandera el false para indicar que si se borró un dato
             }
+            // Para cuando la cabeaza no tiene el valor que sea desea borrar
             else
             {
-                if (current->data == value)
+                // Validacion para saber si el dato del nodo actual coincide con el filtro
+                if (current->data == filter)
                 {
-                    past->next = current->next;
-                    delete current;
-                    current = past;
+                    past->next = current->next; // El nodo anterior ahora apunta a donde está apuntando 'current'
+                    delete current;             // Se libera la memoria de 'current'
+                    cout << "Se ha eliminado un valor de lista" << endl;
+                    current = past; //  'current' pasa a ser el ultimo nodo para seguir buscando
+                    band = false;   // Se coloca la bandera el false para indicar que si se borró un dato
                 }
 
-                past = current;
-                current = current->next;
+                past = current;          // Se rotan, 'past' pasa a ser 'current' para no perder la referencia
+                current = current->next; // Se rotan, ahora 'current' pasa a ser donde está apuntando 'current.next'
             }
         }
+        // Validacon para saber si el un dato fue eliminado
+        if (band)
+        {
+            cout << "No se encontró ningur valor" << endl;
+        }
     }
+    // Para cuando la lista está vacia
     else
     {
         cout << "Nada que borrar" << endl;
@@ -372,15 +450,23 @@ void deleteAll(Node *&head, int value)
  */
 int main()
 {
-    Node *head = nullptr;
-    int data, choise, position, value, new_value;
+    Node *head = nullptr; // Se crea un puntero de tipo Nodo vacio.
+    int data, choise, position, filter, new_value;
     do
     {
-        cout << "Opciones: "
-             << "\n 0: CreateOne --- 1: Creare n Posicion ---  2:ReadOne --- 3:ReadAll --- 4:UpdateOne --- 5:UpdateFirts --- 6:UpdateAll  ---7: deleteOne "
-             << "8: Delete Firts 9: DeleteAll" << endl;
+        cout << "OPCIONES: " << endl;
+        cout << "0. CreateOne: Para crear una dato al final de la fila" << endl;
+        cout << "1. createInPosition: Para insetar un dato en una posicion" << endl;
+        cout << "2. ReadOne: Para leer y mostar el indice de los datos segun el dato" << endl;
+        cout << "3. ReadAll: Para leer todos los datos de la lista" << endl;
+        cout << "4. UpdateOne: Para actualizar el valor segun la poscion" << endl;
+        cout << "5. UpdateFirts: Para actualizar el valor del primer dato encontrado segun el filtro" << endl;
+        cout << "6. UpdateAll: Para actualizar todos los valores seguna el filtro a un nuevo valor" << endl;
+        cout << "7. DeleteOne: Para eliminar un valor segun la posicion" << endl;
+        cout << "8. DeleteFirts: Para eliminar el valor del primer dato encontrado segun el filtro " << endl;
+        cout << "9. DeleteAll: Para eliminar todos los valores seguna el filtro" << endl;
         cin >> choise;
-
+        // Switch que maneja las posibles opciones
         switch (choise)
         {
         case 0:
@@ -407,30 +493,30 @@ int main()
         case 4:
             cout << "Dato a actualizar: ";
             cin >> data;
-            cout << "Posicion del dato: ";
+            cout << "Posicion de la lista para actualizar: ";
             cin >> position;
             updateOne(head, data, position);
             break;
         case 5:
-            cout << "Que dato va actualizar: ";
-            cin >> value;
-            cout << "A que dato a actualizar: ";
+            cout << "Datos que va a reemplezar: ";
+            cin >> filter;
+            cout << "Dato por el cual va a reemplazar: ";
             cin >> new_value;
-            updateFirts(head, new_value, value);
+            updateFirts(head, new_value, filter);
             break;
         case 6:
-            cout << "Que dato va actualizar: ";
-            cin >> value;
-            cout << "A que dato a actualizar: ";
+            cout << "Datos que va a reemplezar: ";
+            cin >> filter;
+            cout << "Datos por el cual va a reemplazar: ";
             cin >> new_value;
-            updateAll(head, new_value, value);
+            updateAll(head, new_value, filter);
             break;
         case 7:
             cout << "Dato a eliminar: ";
-            cin >> data;
+            cin >> filter;
             cout << "Posicion: ";
             cin >> position;
-            deleteOne(head, data, position);
+            deleteOne(head, filter, position);
             break;
         case 8:
             cout << "Dato a eliminar: ";
@@ -447,31 +533,26 @@ int main()
             break;
         }
 
-        cout << "\n Opciones: \n"
+        cout << "\nOpciones: \n"
              << "0:Finalizar 1:Seguir" << endl;
         cin >> choise;
-
+        // system("cls");
     } while (choise == 1);
 
-    // Se crea un puntero de tipo Nodo vacio.
-
-    // Se llama a la funcion 'createOne()' y se pasan de parametros el puntero 'head' y el valor que sea desea guardar en la lista. (El tipo de valor se define en la estrcutura Node).
-
     // Incio de impresion.
-    cout << "Lista de punteros: ";
+    cout << "Lista final: " << endl;
     // Se llama a la lista readAll, y se pasa el parametro head.
     readAll(head);
-
     // Ciclo While que se ejecuta siempre y cuando 'head' sea diferente a nullptr.
     /*while (head != nullptr)
-     {
-         // Se crea un puntero para de tipo Nodo que es igual a la variable 'head'.
-         Node *temp = head;
-         // Se actualiza el valor de 'head' al siguiente espacio en memoria del siguiente Nodo..
-         head = head->next;
-         // Se libera la memoria, segun 'temp'.
-         delete temp;
-     }*/
+         {
+             // Se crea un puntero para de tipo Nodo que es igual a la variable 'head'.
+             Node *temp = head;
+             // Se actualiza el valor de 'head' al siguiente espacio en memoria del siguiente Nodo..
+             head = head->next;
+             // Se libera la memoria, segun 'temp'.
+             delete temp;
+         }*/
     system("PAUSE");
     return 0;
 }
